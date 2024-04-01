@@ -41,6 +41,7 @@ public class Ex9_doOnXxx_Operator {
   void mono_doOnComplete() {
     Flux.just("abc", "def")
         .doOnComplete(() -> System.out.println("doOnComplete"))
+        .doOnNext(data -> System.out.println("doOnNext: " + data))
         .subscribe(System.out::println);
   }
 

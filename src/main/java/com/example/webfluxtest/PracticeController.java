@@ -26,6 +26,10 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class PracticeController {
 
+  private static final String USER_ACCOUNT_KEY_FORMAT = "";
+  private static final String USER_ACCOUNT_LOCK_KEY_FORMAT = "";
+
+
   private final RedisRepository redisRepository;
   private final UserAccountRepository userAccountRepository;
 
@@ -56,7 +60,7 @@ public class PracticeController {
    */
 
   @GetMapping("/users/{id}/info")
-  public Mono<?> getUserInfo(@PathVariable String id) {
+  public Mono<UserInfoResponse> getUserInfo(@PathVariable String id) {
     return Mono.empty();
   }
 
@@ -66,8 +70,9 @@ public class PracticeController {
    * 이 연산은 반드시 원자성을 보장해야 한다. 즉, 송금이 실패하면 sender/receiver의 계좌 잔액은 변하지 않아야 한다.
    * <p>
    * 해당 요청은 동시에 발생할 수 있다. 따라서 Redis Lock을 이용해서 동시성을 제어해야 한다.
+   * 만약 어떤 작업이 진행 중이라면, 그냥 실패로 응답한다.
    * <p>
-   * 각 유저의 총 계좌 잔액은 항상 캐싱되어있어야 한다.
+   * 각 유저의 총 계좌 잔액은 항상 Redis 캐싱되어있어야 한다.
    */
 
   @PostMapping("/transfer")
