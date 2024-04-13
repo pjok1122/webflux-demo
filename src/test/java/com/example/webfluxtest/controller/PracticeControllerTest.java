@@ -1,6 +1,7 @@
 package com.example.webfluxtest.controller;
 
-import com.example.webfluxtest.AnswerSheetController;
+import static com.example.webfluxtest.PracticeController.USER_ACCOUNT_KEY_FORMAT;
+
 import com.example.webfluxtest.repsotiory.RedisRepository;
 import com.example.webfluxtest.repsotiory.UserAccountRepository.UserAccount;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -36,7 +37,7 @@ public class PracticeControllerTest {
                  .expectStatus().isOk()
                  .expectBody(String.class).isEqualTo("success");
 
-    StepVerifier.create(redisRepository.get(AnswerSheetController.USER_ACCOUNT_KEY_FORMAT.replace("{id}", "1")))
+    StepVerifier.create(redisRepository.get(USER_ACCOUNT_KEY_FORMAT.replace("{id}", "1")))
                 .expectNext(100)
                 .verifyComplete();
   }
@@ -50,7 +51,7 @@ public class PracticeControllerTest {
                  .expectStatus().isOk()
                  .expectBody(String.class).isEqualTo("fail");
 
-    StepVerifier.create(redisRepository.get(AnswerSheetController.USER_ACCOUNT_KEY_FORMAT.replace("{id}", "2")))
+    StepVerifier.create(redisRepository.get(USER_ACCOUNT_KEY_FORMAT.replace("{id}", "2")))
                 .expectNextCount(0)
                 .verifyComplete();
   }
@@ -70,7 +71,7 @@ public class PracticeControllerTest {
                  .expectStatus().isOk()
                  .expectBody(String.class).isEqualTo("success");
 
-    StepVerifier.create(redisRepository.get(AnswerSheetController.USER_ACCOUNT_KEY_FORMAT.replace("{id}", "3")))
+    StepVerifier.create(redisRepository.get(USER_ACCOUNT_KEY_FORMAT.replace("{id}", "3")))
                 .expectNext(200)
                 .verifyComplete();
   }
@@ -96,7 +97,7 @@ public class PracticeControllerTest {
                  .expectStatus().isOk()
                  .expectBody(String.class).isEqualTo("fail");
 
-    StepVerifier.create(redisRepository.get(AnswerSheetController.USER_ACCOUNT_KEY_FORMAT.replace("{id}", "4")))
+    StepVerifier.create(redisRepository.get(USER_ACCOUNT_KEY_FORMAT.replace("{id}", "4")))
                 .expectNext(70)
                 .verifyComplete();
   }
@@ -106,7 +107,7 @@ public class PracticeControllerTest {
   void getUserInfo_success() {
     AtomicBoolean isFailed = new AtomicBoolean(false);
 
-    redisRepository.set(AnswerSheetController.USER_ACCOUNT_KEY_FORMAT.replace("{id}", "5"), 100).subscribe();
+    redisRepository.set(USER_ACCOUNT_KEY_FORMAT.replace("{id}", "5"), 100).subscribe();
 
     for (int i = 0; i < 50; i++) {
       if (i == 49) {
@@ -142,7 +143,7 @@ public class PracticeControllerTest {
   @DisplayName("유저 정보를 불러오지 못한 경우")
   void getUserInfo_fail() {
     AtomicBoolean isFailed = new AtomicBoolean(false);
-    redisRepository.set(AnswerSheetController.USER_ACCOUNT_KEY_FORMAT.replace("{id}", "6"), 100).subscribe();
+    redisRepository.set(USER_ACCOUNT_KEY_FORMAT.replace("{id}", "6"), 100).subscribe();
 
     for (int i = 0; i < 50; i++) {
       if (i == 49) {
@@ -168,7 +169,7 @@ public class PracticeControllerTest {
   @DisplayName("배너 정보를 불러오지 못한 경우")
   void getUserInfo_banner_fail() {
     AtomicBoolean isFailed = new AtomicBoolean(false);
-    redisRepository.set(AnswerSheetController.USER_ACCOUNT_KEY_FORMAT.replace("{id}", "7"), 100).subscribe();
+    redisRepository.set(USER_ACCOUNT_KEY_FORMAT.replace("{id}", "7"), 100).subscribe();
 
     for (int i = 0; i < 50; i++) {
       if (i == 49) {
@@ -220,7 +221,7 @@ public class PracticeControllerTest {
                      .jsonPath("$.basicInfo.id").isEqualTo(8)
                      .jsonPath("$.account").isEqualTo(0);
 
-        StepVerifier.create(redisRepository.get(AnswerSheetController.USER_ACCOUNT_KEY_FORMAT.replace("{id}", "8")))
+        StepVerifier.create(redisRepository.get(USER_ACCOUNT_KEY_FORMAT.replace("{id}", "8")))
                     .expectNext(0)
                     .verifyComplete();
 
