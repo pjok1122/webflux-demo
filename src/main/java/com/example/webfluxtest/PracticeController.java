@@ -1,34 +1,25 @@
 package com.example.webfluxtest;
 
-import com.example.webfluxtest.AnswerSheetController.BasicInfoResponse;
-import com.example.webfluxtest.AnswerSheetController.TransferRequest;
-import com.example.webfluxtest.AnswerSheetController.UserInfoResponse;
 import com.example.webfluxtest.repsotiory.RedisRepository;
 import com.example.webfluxtest.repsotiory.UserAccountRepository;
 import com.example.webfluxtest.repsotiory.UserAccountRepository.UserAccount;
-import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
 public class PracticeController {
 
-  private static final String USER_ACCOUNT_KEY_FORMAT = "";
-  private static final String USER_ACCOUNT_LOCK_KEY_FORMAT = "";
-
+  public static final String USER_ACCOUNT_KEY_FORMAT = "account:{id}";
+  public static final String USER_ACCOUNT_LOCK_KEY_FORMAT = "account:lock:{id}";
 
   private final RedisRepository redisRepository;
   private final UserAccountRepository userAccountRepository;
@@ -76,12 +67,12 @@ public class PracticeController {
    */
 
   @PostMapping("/transfer")
-  public Mono<Void> transfer(@RequestBody AnswerSheetController.TransferRequest request) {
+  public Mono<Void> transfer(@RequestBody TransferRequest request) {
     return Mono.empty();
   }
 
   @Data
-  static class TransferRequest {
+  public static class TransferRequest {
 
     public Integer sender;
     public Integer receiver;
@@ -89,7 +80,7 @@ public class PracticeController {
   }
 
   @Data
-  static class BasicInfoResponse {
+  public static class BasicInfoResponse {
 
     public String address;
     public String name;
@@ -99,9 +90,9 @@ public class PracticeController {
 
   @Data
   @AllArgsConstructor
-  static class UserInfoResponse {
+  public static class UserInfoResponse {
 
-    public AnswerSheetController.BasicInfoResponse basicInfo;
+    public BasicInfoResponse basicInfo;
     public Integer account;
     public List<String> banners;
   }
