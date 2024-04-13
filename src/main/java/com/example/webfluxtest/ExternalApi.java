@@ -31,13 +31,12 @@ public class ExternalApi {
   }
 
   @GetMapping("/ad/banners")
-  public Flux<String> getBanners(@RequestParam Long userId) {
+  public Mono<List<String>> getBanners(@RequestParam Long userId) {
     int delaySeconds = random.nextInt(4);   // 0 ~ 3
     return Mono.just(List.of("http://localhost:8080/banner1",
                              "http://localhost:8080/banner2",
                              "http://localhost:8080/banner3"))
-               .delayElement(Duration.ofSeconds(delaySeconds))
-        .flatMapIterable(it -> it);
+               .delayElement(Duration.ofSeconds(delaySeconds));
   }
 
 }
