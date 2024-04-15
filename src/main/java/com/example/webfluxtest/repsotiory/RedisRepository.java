@@ -10,8 +10,7 @@ public class RedisRepository {
   private ConcurrentHashMap<String, Integer> redis = new ConcurrentHashMap<>();
 
   public Mono<Integer> set(String key, int value) {
-    redis.put(key, value);
-    return Mono.just(value);
+    return Mono.defer(() -> Mono.just(redis.put(key, value) == null ? value : value));
   }
 
   public Mono<Integer> setIfAbsent(String key, int value) {
