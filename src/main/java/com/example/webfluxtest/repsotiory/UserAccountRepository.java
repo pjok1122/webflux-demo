@@ -3,6 +3,7 @@ package com.example.webfluxtest.repsotiory;
 import java.util.HashMap;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -28,6 +29,7 @@ public class UserAccountRepository {
 
   @AllArgsConstructor
   @Data
+  @NoArgsConstructor
   public static class UserAccount {
 
     private Integer id;

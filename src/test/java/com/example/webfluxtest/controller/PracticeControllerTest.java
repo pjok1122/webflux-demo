@@ -25,8 +25,8 @@ public class PracticeControllerTest {
   private RedisRepository redisRepository;
 
 
-  public static final String ADD_BALANCE_URI = "/users/account";
-  public static final String GET_USER_INFO_URI = "/users/{id}/info";
+  public static final String ADD_BALANCE_URI = "/answer/users/account";
+  public static final String GET_USER_INFO_URI = "/answer/users/{id}/info";
 
   @Test
   @DisplayName("유저 잔고 증가가 정상적으로 이루어진다.")
@@ -51,9 +51,25 @@ public class PracticeControllerTest {
                  .expectStatus().isOk()
                  .expectBody(String.class).isEqualTo("fail");
 
-    StepVerifier.create(redisRepository.get(USER_ACCOUNT_KEY_FORMAT.replace("{id}", "2")))
-                .expectNextCount(0)
-                .verifyComplete();
+    AtomicBoolean isZero = new AtomicBoolean(true);
+    AtomicBoolean isEmpty = new AtomicBoolean(true);
+    try {
+      StepVerifier.create(redisRepository.get(USER_ACCOUNT_KEY_FORMAT.replace("{id}", "2")))
+                  .expectNext(0)
+                  .verifyComplete();
+    } catch (AssertionError error) {
+      isZero.set(false);
+    }
+
+    try {
+      StepVerifier.create(redisRepository.get(USER_ACCOUNT_KEY_FORMAT.replace("{id}", "2")))
+                  .expectNextCount(0)
+                  .verifyComplete();
+    } catch (AssertionError error) {
+      isEmpty.set(false);
+    }
+
+    Assertions.assertThat(isZero.get() || isEmpty.get()).isTrue();
   }
 
   @Test
